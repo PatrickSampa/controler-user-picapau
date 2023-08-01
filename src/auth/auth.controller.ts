@@ -10,6 +10,6 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     @UseGuards(LocalAuthGuard)
     async login(){
-        return "alguma coisa"
+        return "aqui"
     }
 }
