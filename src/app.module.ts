@@ -8,7 +8,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { AdvogadosModule } from './advogados/advogados.module';
 
 @Module({
-  imports: [forwardRef(() => UserModule), forwardRef(() => AuthModule), AdvogadosModule],
+  imports: [forwardRef(() => UserModule), forwardRef(() => AuthModule), forwardRef(() => AdvogadosModule)],
   controllers: [AppController],
   providers: [AppService, 
     {
