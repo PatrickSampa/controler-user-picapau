@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt'
-import { User } from '../user/entities/user.entity';
-import { UserPayload } from './models/UserPayload';
+import { User } from '../entities/user.entity';
+import { UserPayload } from '../models/UserPayload';
 import { JwtService } from '@nestjs/jwt';
-import { UserToken } from './models/UserToken';
+import { UserToken } from '../models/UserToken';
+import { UserService } from '../user/user.service';
 
 
 @Injectable()
 export class AuthService {
-    constructor(private readonly userService: UserService,
-        private readonly jwtService: JwtService){}
+    constructor(private readonly jwtService: JwtService, 
+                private readonly userService: UserService){}
     
     
      login(user: User): UserToken {
@@ -56,5 +56,17 @@ export class AuthService {
             }
         }
         throw new Error('Email adress or password provided is incorret.')
+    }
+
+
+    async checkToken(token: string){
+        try{
+            const data = this.jwtService.verify(token, {
+                secret: process.env.JWT_SECRET
+            })
+            return data
+        }catch(e){
+            throw new Error("Token Invalido")
+        }
     }
 }

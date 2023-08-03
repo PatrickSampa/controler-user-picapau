@@ -1,13 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateUserDto } from '../dto/create-user.dto';
+import { UpdateUserDto } from '../dto/update-user.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcypt from 'bcrypt';
+import { User } from '../entities/user.entity';
+import { AuthService } from '../auth/auth.service';
 
 
 @Injectable()
 export class UserService {
-  constructor(private readonly prisma: PrismaService){}
+  constructor(private readonly prisma: PrismaService,
+    private readonly authService: AuthService){}
   async create(createUserDto: CreateUserDto) {
     createUserDto.password = await bcypt.hash(createUserDto.password, 10)
 
@@ -18,20 +21,39 @@ export class UserService {
     return createUser;
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async findAll() {
+    return (await this.prisma.user.findMany()).map(({id, email, name}) => ({id, email, name}))
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+
+
+  async update({id, email, name, password}) {
+    if(!(await this.prisma.user.count({
+      where: {id}
+    }))){
+      throw new Error("Usuario não encontrado")
+    }
+    const data: any = {};
+    if(email){
+      data.email = email
+    }
+    if(name){
+      data.name = name
+    }
+    if(password){
+      const newPassword =  await bcypt.hash(password, 10)
+      data.password = newPassword
+    }
+
+    await this.prisma.user.update({
+      where: { id}, 
+      data
+    })
+     return this.findAll()
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  remove(token: string) {
+    /* return this.authService.checkToken(token) */
   }
 
 
