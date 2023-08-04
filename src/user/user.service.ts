@@ -30,21 +30,21 @@ export class UserService {
 
 
 
-  async update({email, name, password}, id:string) {
+  async update(UserData: User, id:string) {
     if(!(await this.prisma.user.count({
       where: {id}
     }))){
       throw new Error("Usuario não encontrado")
     }
     const data: any = {};
-    if(email){
-      data.email = email
+    if(UserData.email){
+      data.email = UserData.email
     }
-    if(name){
-      data.name = name
+    if(UserData.name){
+      data.name = UserData.name
     }
-    if(password){
-      const newPassword =  await bcypt.hash(password, 10)
+    if(UserData.password){
+      const newPassword =  await bcypt.hash(UserData.password, 10)
       data.password = newPassword
     }
 
