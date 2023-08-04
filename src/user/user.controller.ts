@@ -9,24 +9,24 @@ import { AuthRequest } from '../models/AuthRequest';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @IsPublic()
+  
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
 
-  @IsPublic()
+  
   @Get()
   findAll() {
     return this.userService.findAll();
   }
 
 
-  @IsPublic()
-  @Patch()
+  
+  /* @Patch()
   update(@Request() req: AuthRequest) { 
     return this.userService.update(req.body);
-  }
+  } */
 
   @Delete()
   remove(@Request() req: AuthRequest) {

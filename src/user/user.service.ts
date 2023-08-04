@@ -9,9 +9,12 @@ import { AuthService } from '../auth/auth.service';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly prisma: PrismaService,
-    private readonly authService: AuthService){}
+  constructor(private readonly prisma: PrismaService,){}
+
+
   async create(createUserDto: CreateUserDto) {
+
+    
     createUserDto.password = await bcypt.hash(createUserDto.password, 10)
 
     const createUser = await this.prisma.user.create({
@@ -27,7 +30,7 @@ export class UserService {
 
 
 
-  async update({id, email, name, password}) {
+  async update({email, name, password}, id:string) {
     if(!(await this.prisma.user.count({
       where: {id}
     }))){
@@ -52,8 +55,14 @@ export class UserService {
      return this.findAll()
   }
 
-  remove(token: string) {
-    /* return this.authService.checkToken(token) */
+
+
+  remove(id: string) {
+    return  this.prisma.user.delete({
+      where: {
+        id
+      }
+    })
   }
 
 
