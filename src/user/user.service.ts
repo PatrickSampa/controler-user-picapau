@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { PrismaService } from '../prisma/prisma.service';
@@ -58,11 +58,16 @@ export class UserService {
 
 
   remove(id: string) {
-    return  this.prisma.user.delete({
-      where: {
-        id
-      }
-    })
+    try{
+      return  this.prisma.user.delete({
+        where: {
+          id
+        }
+      })
+    }catch(e){
+      throw new BadRequestException('Usuario não existe')
+    }
+    
   }
 
 

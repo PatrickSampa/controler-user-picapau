@@ -65,7 +65,7 @@ export class AuthService {
       
       async remove(token: string) {
         const userId = await this.checkToken((token.split(" ")[1]))
-        
+
         return this.userService.remove(userId.sub)
       }
       
