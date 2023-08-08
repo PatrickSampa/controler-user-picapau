@@ -1,15 +1,19 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcypt from 'bcrypt';
 import { User } from '../entities/user.entity';
 import { AuthService } from '../auth/auth.service';
+import { IUsersRepository } from '../repositories/IUsersRepository';
+
 
 
 @Injectable()
 export class UserService {
-  constructor(private readonly prisma: PrismaService,){}
+  constructor(
+    @Inject('IUsersRepository')
+    private iuserRepository : IUsersRepository,){}
 
 
   async create(createUserDto: CreateUserDto) {
@@ -17,21 +21,22 @@ export class UserService {
     
     createUserDto.password = await bcypt.hash(createUserDto.password, 10)
 
-    const createUser = await this.prisma.user.create({
+    const createUser = await this.iuserRepository.create(createUserDto);
+/*     const createUser = await this.prisma.user.create({
       data: createUserDto
-    })
+    }) */
     createUser.password = undefined;
     return createUser;
   }
 
   async findAll() {
-    return (await this.prisma.user.findMany()).map(({id, email, name}) => ({id, email, name}))
+    //return (await this.prisma.user.findMany()).map(({id, email, name}) => ({id, email, name}))
   }
 
 
 
   async update(UserData: User, id:string) {
-    if(!(await this.prisma.user.count({
+    /* if(!(await this.prisma.user.count({
       where: {id}
     }))){
       throw new Error("Usuario não encontrado")
@@ -52,13 +57,13 @@ export class UserService {
       where: { id}, 
       data
     })
-     return this.findAll()
+     return this.findAll() */
   }
 
 
 
   remove(id: string) {
-    try{
+/*     try{
       return  this.prisma.user.delete({
         where: {
           id
@@ -66,17 +71,18 @@ export class UserService {
       })
     }catch(e){
       throw new BadRequestException('Usuario não existe')
-    }
+    } */
     
   }
 
 
   async findByEmail(email: string) {
-    return await this.prisma.user.findFirst({
+    return this.iuserRepository.findByEmail(email)
+    /* return await this.prisma.user.findFirst({
       where: {
         email
       }
-    })
+    }) */
     
     
   }
