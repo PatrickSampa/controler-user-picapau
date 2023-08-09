@@ -4,6 +4,7 @@ import { UpdateUserDto } from '../dto/update-user.dto';
 import { CreateAdvogadoDto } from '../dto/create-advogado.dto';
 import { AdvogadosService } from './advogados.service';
 import { deleteAdvogadoDTO } from '../dto/deleteadvogado.dto';
+import { UpdateAdvogadoDTO } from '../dto/update-advogado.dto';
 
 @Controller('advogados')
 export class AdvogadosController {
@@ -30,9 +31,9 @@ constructor(private readonly advogadosService: AdvogadosService){}
     } 
 
 
-    @Patch('update/user')
-    update(@Request() req: AuthRequest, @Body() user: UpdateUserDto) { 
-     /*  return this.authService.update(req.headers.authorization, user); */
+    @Patch('update')
+    update(@Request() req: AuthRequest, @Body() advogado: UpdateAdvogadoDTO) { 
+     return this.advogadosService.update(req.headers.authorization, advogado)
     }
 
 
