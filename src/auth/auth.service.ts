@@ -54,6 +54,7 @@ export class AuthService {
         const { email, name, password } = User
         if(!(await this.userService.findByEmail(email))){
             const UserToken = await this.checkToken((token.split(" ")[1]))
+            //console.log(UserToken, { email, name, password })
             return await this.userService.update({ email, name, password }, UserToken.sub)
         }
         throw new BadRequestException('Este Email já existe')

@@ -25,22 +25,20 @@ export class UserService {
 /*     const createUser = await this.prisma.user.create({
       data: createUserDto
     }) */
+    console.log(createUser)
     createUser.password = undefined;
     return createUser;
   }
 
   async findAll() {
+    return this.iuserRepository.findAll();
     //return (await this.prisma.user.findMany()).map(({id, email, name}) => ({id, email, name}))
   }
 
 
 
   async update(UserData: User, id:string) {
-    /* if(!(await this.prisma.user.count({
-      where: {id}
-    }))){
-      throw new Error("Usuario não encontrado")
-    }
+    
     const data: any = {};
     if(UserData.email){
       data.email = UserData.email
@@ -52,12 +50,13 @@ export class UserService {
       const newPassword =  await bcypt.hash(UserData.password, 10)
       data.password = newPassword
     }
-
-    await this.prisma.user.update({
+    
+    /* await this.prisma.user.update({
       where: { id}, 
       data
-    })
-     return this.findAll() */
+    }) */
+
+     return await this.iuserRepository.update(data,id)
   }
 
 
@@ -72,6 +71,7 @@ export class UserService {
     }catch(e){
       throw new BadRequestException('Usuario não existe')
     } */
+    return this.iuserRepository.remove(id)
     
   }
 

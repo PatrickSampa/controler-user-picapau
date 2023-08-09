@@ -8,52 +8,69 @@ import { IUsersRepository } from "../IUsersRepository";
 @Injectable()
 export class PostgresUsersRepository implements IUsersRepository {
     constructor(private readonly prisma: PrismaService){}
-
-
+    
+    
     async create(user: User): Promise<User> {
         const createUser = await this.prisma.user.create({
             data: user
-          })
-          return createUser
+        })
+        return createUser
     }
-
-
-
+    
+    
+    
     async findAll(): Promise<User[]> {
-        return await this.prisma.user.findMany(); 
+        const findAll =  await this.prisma.user.findMany(); 
+        return findAll
     }
-
-
-
+    
+    
+    
     async update(user: User, id: string): Promise<User> {
         const userUpdate = await this.prisma.user.update({
             where: { id}, 
             data: user
-          })
-          return this.findByEmail(userUpdate.email)
-          
+        })
+        return this.findById(userUpdate.id)
+        
     }
 
-
+    
     remove(id: string): Promise<User> {
         try{
             return  this.prisma.user.delete({
-              where: {
-                id
-              }
+                where: {
+                    id
+                }
             })
-          }catch(e){
+        }catch(e){
             throw new BadRequestException('Usuario não existe')
-          }
+        }
     }
-
-
+    
+    
     async findByEmail(email: string): Promise<User> {
         return await this.prisma.user.findFirst({
             where: {
-              email
+                email
             }
-          })
+        })
     }
+
+    
+    async findById(id: string): Promise<User> {
+        const UserId = await this.prisma.user.findUnique({
+            where: {
+                id
+            }
+        })
+
+        if(!(UserId)){
+            throw new Error("Usuario não encontrado")
+          }
+          return UserId
+    }
+
+
 
 }
