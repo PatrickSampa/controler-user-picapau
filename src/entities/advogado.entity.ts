@@ -1,5 +1,5 @@
 export class Advogados {
-    id?: number;
+    id: number;
     name: string;
     userId:string;
 }

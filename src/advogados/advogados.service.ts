@@ -43,12 +43,8 @@ export class AdvogadosService {
     }
 
     async advogadosAllUser(token: string){
-        /* const idUser = await this.authService.checkToken((token.split(" ")[1]))
-        return this.prisma.advogados.findMany({
-            where: {
-                userId :  idUser.sub
-            }
-        }) */
+        const idUser = await this.authService.checkToken((token.split(" ")[1]))
+        return this.iLawyerRepository.advogadosAllUser(idUser.sub)
     }
 
      async update(token: string, advogado: UpdateAdvogadoDTO){

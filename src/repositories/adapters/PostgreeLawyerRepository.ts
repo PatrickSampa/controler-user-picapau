@@ -22,24 +22,34 @@ export class PostgresLawyerRepository implements ILawyerRepository{
     }
 
 
-    advogadosAll(): Promise<Advogados[]> {
-        return this.prisma.advogados.findMany()
+    async advogadosAll(): Promise<Advogados[]> {
+        return await this.prisma.advogados.findMany()
     }
 
 
     async update(idUser: string, advogado: UpdateAdvogadoDTO): Promise<Advogados> {
-        console.log(idUser, advogado)
+
+    
         return await this.prisma.advogados.update({
-            where: { id: advogado.id, userId: idUser },
+            where: { id: advogado.id},
             data: advogado
         })
     }
+    
     remove(token: string, advogado: deleteAdvogadoDTO): Promise<Advogados> {
         throw new Error("Method not implemented.");
     }
-    advogadosAllUser(token: string): Promise<Advogados> {
-        throw new Error("Method not implemented.");
+
+
+    async advogadosAllUser(id: string): Promise<Advogados[]> {
+        return await this.prisma.advogados.findMany({
+            where: {
+                userId : id
+            }
+        })
     }
+
+
     findByName(name: string, id: string): Promise<Advogados> {
         throw new Error("Method not implemented.");
     }
