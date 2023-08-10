@@ -23,17 +23,14 @@ export class AdvogadosService {
     }
 
     async remove(token:string, advogado: deleteAdvogadoDTO){
-        /* advogado.name = ((advogado.name).toLowerCase()).replace(/\s+/g, ' ');
-        const idUser = await this.authService.checkToken((token.split(" ")[1]))
-        const advEncontrado = await this.findByName(advogado.name, idUser.sub)
-        if(advEncontrado){
-            return await this.prisma.advogados.delete({
-                where:{
-                    id: advEncontrado.id 
-                }
-            })
+        if(isNaN(advogado.id)){
+            throw new BadRequestException(`O ID informado é inválido`)
         }
-        throw new BadRequestException('Advogado não existe no banco') */
+
+        if(!(await this.iLawyerRepository.advogadoId(advogado.id))){
+            throw new BadRequestException(`O ID informado é inválido`)
+        }
+        return this.iLawyerRepository.remove(advogado.id)
         
     }
 

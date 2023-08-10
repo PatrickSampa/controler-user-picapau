@@ -10,7 +10,8 @@ export interface ILawyerRepository {
     create(lawyer: newObjectCreateDTO): Promise<Advogados>;
     advogadosAll(): Promise<Advogados[]>;
     update(idUser: string, advogado: UpdateAdvogadoDTO): Promise<Advogados>;
-    remove(token:string, advogado: deleteAdvogadoDTO): Promise<Advogados>;
+    remove(id: number): Promise<Advogados>;
     advogadosAllUser(id: string): Promise<Advogados[]>;
     findByName(name: string, id: string): Promise<Advogados>;
+    advogadoId(id: number): Promise<Advogados>
 }
