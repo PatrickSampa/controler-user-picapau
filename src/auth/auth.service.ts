@@ -38,7 +38,17 @@ export class AuthService {
             throw new BadRequestException('E-mail já cadastrado')
         }
 
-        return await this.userService.create(createUserDto)
+        const createUser = await this.userService.create(createUserDto)
+        const payload: UserPayload = {
+            sub: createUser.id,
+            email: createUser.email,
+            name: createUser.name
+        }
+        const jwtToken = this.jwtService.sign(payload)
+
+        return {
+            access_token: jwtToken
+        }
         
     }
     

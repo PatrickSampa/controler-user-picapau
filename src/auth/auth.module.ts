@@ -12,7 +12,7 @@ import { UserService } from '../user/user.service';
 @Module({
   imports: [forwardRef(() => UserModule), JwtModule.register({
     secret: process.env.JWT_SECRET,
-    signOptions: { expiresIn: '2d' }
+    signOptions: { expiresIn: '20s' }
   })],
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, JwtStrategy],

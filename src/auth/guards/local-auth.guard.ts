@@ -8,6 +8,7 @@ import {
   @Injectable()
   export class LocalAuthGuard extends AuthGuard('local') {
     canActivate(context: ExecutionContext) {
+      console.log(context)
       return super.canActivate(context);
     }
   

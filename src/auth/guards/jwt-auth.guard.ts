@@ -23,24 +23,23 @@ import {
         context.getHandler(),
         context.getClass(),
       ]);
-  
+      console.log(context)
       if (isPublic) {
         return true;
       }
   
       const canActivate = super.canActivate(context);
-  
       if (typeof canActivate === 'boolean') {
         return canActivate;
       }
   
-      const canActivatePromise = canActivate as Promise<boolean>;
-  
+      const canActivatePromise =  canActivate as Promise<boolean>;
       return canActivatePromise.catch((error) => {
         if (error instanceof UnauthorizedError) {
+          console.log("ERRO AQUI?1")
           throw new UnauthorizedException(error.message);
         }
-  
+        console.log("e: ",Error)
         throw new UnauthorizedException();
       });
     }
